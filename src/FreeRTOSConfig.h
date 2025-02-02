@@ -7,7 +7,7 @@
 /// Application specific definitions
 
 // Set to 1 for preemptive scheduling, 0 for cooperative scheduling
-#define configUSE_PREEMPTION                    1 
+#define configUSE_PREEMPTION                    1
 // Define the tick rate in Hertz (ticks per second)
 #define configTICK_RATE_HZ                      (1000) // 2000 ticks per second, 0.5 milliseconds per tick
 // Define the maximum number of task priorities
