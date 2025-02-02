@@ -15,9 +15,12 @@ esp32-freertos-project
 ├── src  
 │ ├── main.cpp // Entry point of the application  
 │ ├── tasks  
-│ │ ├── button_task.cpp // Implementation of the button task  
 │ │ ├── adc_task.cpp // Implementation of the ADC task  
-│ │ └── led_task.cpp // Management of the LED indicator  
+│ │ ├── button_task.cpp // Implementation of the button task  
+│ │ ├── led_task.cpp // Management of the LED indicator  
+│ │ ├── sleep_task.cpp // Implementation of the sleep task  
+│ │ ├── webserver_task.cpp // Implementation of the webserver task  
+│ │ └── wifi_task.cpp // Implementation of the WiFi task  
 │ └── types  
 │ └── index.h // Type definitions and structures  
 ├── include  
@@ -29,6 +32,9 @@ esp32-freertos-project
 - **Button Task**: Monitors the button state and creates the LED and ADC tasks when the button is pressed.
 - **ADC Task**: Collects analog measurements for 2 seconds and stores the values with timestamps.
 - **LED Task**: Controls the LED indicator based on signals from the button and ADC tasks.
+- **Sleep Task**: Manages the sleep mode of the ESP32.
+- **Webserver Task**: Hosts a web server to display ADC readings.
+- **WiFi Task**: Manages the WiFi connection.
 
 ## Notes
 - Ensure that the button and LED are connected to the correct pins as defined in `config.h`.
