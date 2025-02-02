@@ -7,45 +7,31 @@
 
 // Handle for the button task
 extern TaskHandle_t buttonTaskHandle;
+extern TaskHandle_t webServerTaskHandle;
 
-// Function to print heap memory status
-/*void printHeapMemoryStatus() {
-    Serial.print("Free heap size: ");
-    Serial.println(esp_get_free_heap_size());
-    Serial.print("Minimum free heap size: ");
-    Serial.println(esp_get_minimum_free_heap_size());
-}*/
-
-// Function to print task stack high water mark
-/*void printTaskStackHighWaterMark(TaskHandle_t xTask) {
-    UBaseType_t highWaterMark = uxTaskGetStackHighWaterMark(xTask);
-    Serial.print("Task stack high water mark: ");
-    Serial.print(highWaterMark);
-    Serial.println(" words");
-}*/
+// External variables
+extern int counterSamples;
+extern ADCMeasurement samples[ADC_MEASUREMENT_COUNT]; // Array to store ADC samples
 
 void adcTask(void *pvParameters) {
+    const int maxSamples = ADC_MEASUREMENT_COUNT;
     analogReadResolution(ADC_RESOLUTION); // Set ADC resolution
-    const int maxSamples = ADC_MEASUREMENT_COUNT; // Maximum number of samples based on stack size
-    int counterSamples = 0;
-    ADCMeasurement samples[maxSamples]; // Array to store ADC samples
+    
     TickType_t startTime = xTaskGetTickCount(); // Task start time
     TickType_t endTime = startTime + pdMS_TO_TICKS(ADC_MEASUREMENT_DURATION); // Task end time
 
-    //Serial.println("Memory status before ADC task:");
-    //printHeapMemoryStatus(); // Print heap memory status before ADC task
-    //printTaskStackHighWaterMark(NULL); // Print stack high water mark for the current task
-
+    Serial.print("ADC Task running... \n Total samples: ");
+    Serial.println(counterSamples); Serial.println(maxSamples);
     while (xTaskGetTickCount() < endTime && counterSamples < maxSamples) {
         samples[counterSamples].value = analogRead(ADC_PIN); // Read ADC value
         samples[counterSamples].timestamp = (xTaskGetTickCount() - startTime) * portTICK_PERIOD_MS; // Store sample timestamp
-        counterSamples++;
+        counterSamples++;    
+
         vTaskDelay(1); // Delay for sampling rate
     }
 
     Serial.print("ADC Task running... \n Total samples: ");
     Serial.println(counterSamples);
-
     for (int i = 0; i < counterSamples; i++) {
         Serial.print("Sample ");
         Serial.print(i);
@@ -54,14 +40,9 @@ void adcTask(void *pvParameters) {
         Serial.print(" ms, Value: ");
         Serial.println(samples[i].value);
     }
-    /*This information will be sent to other task...*/
+    
+    // Notify the web server task that new data is available
+    xTaskNotifyGive(webServerTaskHandle);
 
-    /*
-    Serial.println("Memory status after ADC task:");
-    printHeapMemoryStatus(); // Print heap memory status after ADC task
-    printTaskStackHighWaterMark(NULL); // Print stack high water mark for the current task
-    */
-    vTaskResume(buttonTaskHandle); // Resume the button task
     vTaskDelete(NULL); // Delete the ADC task
-
 }
