@@ -9,7 +9,7 @@
 // Set to 1 for preemptive scheduling, 0 for cooperative scheduling
 #define configUSE_PREEMPTION                    1 
 // Define the tick rate in Hertz (ticks per second)
-#define configTICK_RATE_HZ                      (1000) // 2000 ticks per second, 0.5 milliseconds per tick
+#define configTICK_RATE_HZ                      (1000) // 1000 ticks per second, 1 milliseconds per tick
 // Define the maximum number of task priorities
 #define configMAX_PRIORITIES                    (5)
 // Define the minimum stack size for tasks
@@ -42,9 +42,9 @@
 #define configSUPPORT_STATIC_ALLOCATION         0
 // Hook function related definitions
 // Set to 1 to enable the idle hook
-#define configUSE_IDLE_HOOK                     0
+#define configUSE_IDLE_HOOK                     1
 // Set to 1 to enable the tick hook
-#define configUSE_TICK_HOOK                     0
+#define configUSE_TICK_HOOK                     1
 // Set to 1 to enable the malloc failed hook
 #define configUSE_MALLOC_FAILED_HOOK            1
 
